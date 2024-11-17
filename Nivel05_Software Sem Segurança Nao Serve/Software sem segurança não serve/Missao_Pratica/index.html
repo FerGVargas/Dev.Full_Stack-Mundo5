@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Missão Prática - Segurança em Software</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #005f99;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+      margin: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      margin: 5px 0;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    .code-block {
+      background-color: #282c34;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Missão Prática - Segurança em Software</h1>
+    <p>Refatoração de aplicação para melhorar a segurança e corrigir falhas.</p>
+  </header>
+
+  <section>
+    <h2>Introdução</h2>
+    <p>O objetivo desta missão prática foi corrigir uma falha de segurança crítica em uma aplicação web que gerava risco de vazamento de dados. A falha estava relacionada à criptografia do parâmetro <strong>session-id</strong>, que era gerado de forma vulnerável e poderia ser facilmente quebrado.</p>
+  </section>
+
+  <section>
+    <h2>Problemas Identificados</h2>
+    <ul>
+      <li>Uso de uma chave de criptografia fraca, baseada no nome da empresa.</li>
+      <li>Ausência de validação de parâmetros nos endpoints da API, deixando a aplicação vulnerável a ataques como SQL Injection.</li>
+      <li>Falta de controle de acesso adequado em alguns endpoints da API.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Soluções Implementadas</h2>
+    <ul>
+      <li>Fortalecimento da criptografia, utilizando um algoritmo mais seguro e um salt único.</li>
+      <li>Validação e sanitização dos parâmetros recebidos nos endpoints, protegendo contra SQL Injection e outros tipos de ataques.</li>
+      <li>Refatoração do código para melhorar o controle de acesso aos dados, permitindo que apenas usuários com o perfil de administrador possam acessar dados sensíveis.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Testes Realizados</h2>
+    <p>Os testes foram realizados utilizando o Postman para simular as requisições para os seguintes endpoints:</p>
+    <ul>
+      <li><strong>POST /api/auth/login</strong>: Realiza o login do usuário e gera a session-id.</li>
+      <li><strong>POST /api/auth/decrypt/:sessionid</strong>: Testa a decriptação da session-id.</li>
+      <li><strong>GET /api/users/:sessionid</strong>: Recupera a lista de usuários, com controle de acesso por perfil.</li>
+      <li><strong>GET /api/contracts/:empresa/:inicio/:sessionid</strong>: Recupera contratos, com validação de parâmetros e controle de acesso.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Exemplo de Código</h2>
+    <p>Veja abaixo um exemplo de como a criptografia foi refatorada utilizando um salt para melhorar a segurança:</p>
+    <div class="code-block">
+      <pre>
+const crypto = require('crypto');
+
+// Função de criptografia aprimorada
+function encrypt(text) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const cipher = crypto.createCipher('aes-256-cbc', salt); // Usando o salt
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+}
+      </pre>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 - Segurança em Software | Todos os direitos reservados</p>
+  </footer>
+
+</body>
+</html>
